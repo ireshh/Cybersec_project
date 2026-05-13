@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>My Notes</title></head>
+<body>
+    <h2>Welcome, {{ username }}!</h2>
+    <a href="{% url 'logout' %}">Logout</a>
+
+    <!-- flaw A03 -> SQL injection -->
+    <form method="GET" action="{% url 'find_note' %}" style="background: #eee; padding: 10px;">
+        <label>Search by Title!</label>
+        <input type="text" name="q" value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+    <br>
+
+    <form method="POST" action="{% url 'notes' %}">
+        {% csrf_token %}
+        <label>Title:</label> <input type="text" name="title" required><br>
+        <label>Content:</label> <textarea name="content" required></textarea><br>
+        <button type="submit">Create Note</button>
+    </form>
+    <hr>
+
+    <h3>All Notes:</h3>
+    <ul>
+        {% for note in notes %}
+            <li>
+                <strong>{{ note.title }}</strong>: {{ note.content }} <br>
+                
+                <!-- flaw A01 -> IDOR delete -->
+                <a href="{% url 'del_note' note.id %}" style="color: red;">[Delete via IDOR]</a> | 
+                
+                <!-- flaw CSRF -> CSRF Delete -->
+                <a href="{% url 'del_csrf' note.id %}" style="color: orange;">[Delete via CSRF route]</a>
+            </li>
+        {% empty %}
+            <li>No notes found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
