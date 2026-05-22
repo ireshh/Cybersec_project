@@ -40,7 +40,7 @@ python manage.py runserver
 1. Open `http://127.0.0.1:8000/register/` and create account.
 2. Log into the application and take some notes.
 3. Use a second browser session (incognito works) with a different account to test IDOR and CSRF flaws.
-4. Use the search bar with a payload such as `' OR '1'='1` to test SQL injection attacks.
+4. Use the search bar with a payload such as `' OR 1=1 --` to test SQL injection attacks.
 5. Visit any nonexistent URL (e.g. `/doesnotexist/`) to trigger the `DEBUG = True` error page exposing private information.
 
 ## Screenshots
